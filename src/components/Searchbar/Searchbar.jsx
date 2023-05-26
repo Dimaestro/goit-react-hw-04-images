@@ -1,42 +1,32 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaSearch } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import styles from './Searchbar.module.css';
 
+const Searchbar = ({ onSubmit }) => {
+  const [findValue, setFindValue] = useState('');
 
-class Searchbar extends Component {
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  }
-  
-  state = {
-    findValue: '',
+  const handleChange = (event) => {
+    const { value } = event.target;
+    setFindValue(value);
   }
 
-  handleChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({[name]: value.toLowerCase()});
-  }
-
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const { findValue } = this.state;
     
     if (findValue.trim() === '') {
       toast.error('Please enter image name!')
       return;
     }
 
-    this.props.onSubmit(findValue.trim());
-    this.setState({ findValue: '' });
+    onSubmit(findValue.trim());
+    setFindValue('');
   }
 
-  render() {
-    const {findValue} = this.state;
-    return (
-      <header className={styles.searchbar}>
-        <form className={styles.form} onSubmit={this.handleSubmit}>
+  return (
+    <header className={styles.searchbar}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <button type="submit" className={styles.button}>
             <span><FaSearch size={24}/></span>
           </button>
@@ -46,13 +36,16 @@ class Searchbar extends Component {
             type="text"
             name='findValue'
             value={findValue}
-            onChange={this.handleChange}
+            onChange={handleChange}
             placeholder="Search images and photos"
           />
         </form>
       </header>
-    );
-  }
+  )
+}
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 }
 
 export default Searchbar;
