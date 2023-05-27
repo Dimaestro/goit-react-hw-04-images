@@ -24,7 +24,7 @@ const App = () => {
       setLoading(true);
       try {
         const {
-          data: { hits: images },
+          data: { hits: images }
         } = await pixabayApi.getImages(findName, page);
 
         if (images.length === 0) {
@@ -43,10 +43,12 @@ const App = () => {
 
         setImages(images => [...images, ...dataImages]);
         setLoading(false);
+
       } catch (err) {
         toast.error(err.message);
       }
     }
+    
     if (findName) {
       load();
     }
